@@ -8,8 +8,11 @@ package org.unitec.elementos1903;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +50,41 @@ public class ControladorProfesor {
     public List<Profesor> buscarTodos(){
         return repoProfe.findAll();
     }
+    //borrar
+    @DeleteMapping("/profesor/{id}")
+ 
+    public Estatus borrar(@PathVariable Integer id){
+
+    repoProfe.deleteById(id);
+    Estatus e=new Estatus();
+    e.setSuccess(true);
+    e.setMensaje("Profesor borrado");
+    return e;
+    }
     
+    //actualizar
+    @PutMapping("/profesor")
+    public Estatus actualizar (@RequestBody String json) throws  Exception{
+        ObjectMapper maper=new ObjectMapper();
+        //AHora si lo leemos 
+      Profesor profe=  maper.readValue(json,Profesor.class);
+     //repoProfe.save(profe);
+      //Generamos el status     
+      Estatus e=new Estatus();
+      e.setMensaje("El profe guardado con exito");
+      e.setSuccess(true);
+      return e;
+    }
+       
+    
+    
+    @GetMapping("/profesor/{id}")
+    
+    public Profesor buscarProfId(@PathVariable Integer id)
+    {
+    return repoProfe.findById(id).get();
+    }
+      
             
-}
+   }
 
